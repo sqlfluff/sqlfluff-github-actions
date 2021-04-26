@@ -27,7 +27,7 @@ Conceptualy, you can connect these poorly named pieces like so:
     - Workflows (define a list of steps to be executed. Triggered by an event like opening a Pull request).
         - Actions (help you perform individual tasks within workflow, like checking out the pull request branch, without you having to write a bunch of code).
 
-Often you will here us (and others, including GitHub) use the term "GitHub Action" and "Workflow" interchangeably. If you simply remember that the YAML files are defining a list of steps to be executed when a certain event happens in your repo, you are well on your way to understanding and using the power of workflows in GitHub Actions.
+Often you will hear us (and others, including GitHub) use the term "GitHub Action" and "Workflow" interchangeably. If you simply remember that the YAML files are defining a list of steps to be executed when a certain event happens in your repo, you are well on your way to understanding and using the power of workflows in GitHub Actions.
 
 ## Resources
 
