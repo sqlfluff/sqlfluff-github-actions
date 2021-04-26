@@ -7,7 +7,7 @@ To add this to your repo, copy the contents of [`sqlfluff_lint_dbt_models.yml`](
 ## Assumptions
 1. You are using `templater = dbt` when running `sqlfluff`.
 1. You use a [`conda`](https://docs.conda.io/projects/conda/en/latest/index.html) enviroment to manage your versions of `dbt` and `sqlfluff`. An example [`environment.yml`](./environment.yml) can be found in this folder.
-1. You need to connect to your database via VPN. If not you can remove the VPN steps from the workflow. Otherwise:
+1. You need to connect to your database via VPN. If not, you can remove the VPN steps from the workflow. Otherwise:
     - We assume the VPN uses the OpenVPN protocol.
     - You will need credentials (user, password, and `.ovpn` file) for the VPN. It's a good idea to create new credentials to be used by this workflow only.
     - __NOTE:__ This workflow has been tested  on Redshift. Config for Snowflake is included, but not tested.
