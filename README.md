@@ -1,4 +1,4 @@
-# sqlfluff-github-action
+# sqlfluff-github-actions
 The official resource for SQLFluff related [GitHub Actions and Workflows](https://docs.github.com/en/actions).
 
 ## Menu of Github Workflows
