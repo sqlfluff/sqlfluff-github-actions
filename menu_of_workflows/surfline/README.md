@@ -23,7 +23,7 @@ As a result of this compilcation:
 __NOTE:__ For connecting to other database types, see notes at end of the __Secret Management__ section below.
 
 #### Secret Management
-You will need to set the following [GitHub Secrets](https://docs.github.com/en/actions/reference/encrypted-secrets) to use this workflow.
+You will need to set the following credentials as [GitHub Secrets](https://docs.github.com/en/actions/reference/encrypted-secrets) to be used in this workflow. We _strongly recommend_ creating credentials to be used by this workflow alone.
 
 - `OVPN_USERNAME`
 - `OVPN_PASSWORD`
