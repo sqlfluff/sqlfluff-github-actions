@@ -22,7 +22,7 @@ These workflows, defined by YAML files placed in the `.github/workflows/` direct
 
 To add a layer of confusion, the [GitHub Marketplace](https://github.com/marketplace?type=actions) has individual "Actions" (e.g., the [checkout](https://github.com/marketplace/actions/checkout) action) that you can use as steps _inside your workflow(s)_. Using Actions can reduce the code you need to write to define your worflow and accomplish your goal.
 
-Conceptualy, you can connect these poorly named pieces like so:
+Conceptually, you can connect these poorly named pieces like so:
 - GitHub Actions (a feature within GitHub allowing you to automate workflows).
     - Workflows (define a list of steps to be executed. Triggered by an event like opening a Pull request).
         - Actions (help you perform individual tasks within workflow, like checking out the pull request branch, without you having to write a bunch of code).
