@@ -1,0 +1,32 @@
+# HEY!
+#
+# You should __NEVER__ check credentials into version control. Thanks for reading :)
+#
+# This 'dummy' profiles.yml is used because when SQLFluff uses the dbt-compiler,
+# a valid connection to the database must be made to compile any SQL containing
+# macros like dbt_utils.star().
+#
+# Normally, profiles.yml is found in ~/.dbt/profiles.yml on your local machine.
+#     See docs: https://docs.getdbt.com/dbt-cli/configure-your-profile#how-to-connect-to-your-warehouse-when-using-the-cli
+#
+# In '.github/workflows/sqlfluff_lint_dbt_models.yml', we set the
+# DBT_PROFILES_DIR environment variable to the path where this dummy
+# profiles.yml will be avaliable in the GitHub Worklfow virtual machine when a
+# pull request is opened. It can then be used by SQLFluff during linting checks.
+
+config:
+    send_anonymous_usage_stats: False
+    use_colors: True
+
+<profile-from-dbt-project-dot-yml>:
+  target: sqlfluff
+  outputs:
+    sqlfluff:
+      type: redshift
+      host: "{{ env_var('PROFILES_YML_HOST') }}"
+      port: "{{ env_var('PROFILES_YML_PORT') | int }}"
+      user: "{{ env_var('PROFILES_YML_USER') }}"
+      pass: "{{ env_var('PROFILES_YML_PASS') }}"
+      dbname: "{{ env_var('PROFILES_YML_DBNAME') }}"
+      schema: "{{ env_var('PROFILES_YML_SCHEMA') }}"
+      threads: 1

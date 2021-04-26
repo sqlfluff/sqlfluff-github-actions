@@ -1,0 +1,133 @@
+name: SQLFluff lint dbt data models
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  sqlfluff-lint-models:
+    name: Lint dbt models using SQLFluff
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest']
+        python-version: [3.8]
+    # Set environment variables used throughout workflow
+    env:
+      DBT_PROFILES_DIR: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/ci_cd
+
+      # SPECIFY database connection credentials as env vars below.
+      # Env var values to be fetched from as GitHub Secrets.
+      # HIGHLY recommended you use a unique set of connection credentials for this worklfow alone.
+
+      # IF USING REDSHIFT, workflow will use these in dummy profiles.yml (else, ignored)
+      PROFILES_YML_HOST: ${{ secrets.PROFILES_YML_HOST }}
+      PROFILES_YML_PORT: ${{ secrets.PROFILES_YML_PORT }}
+      PROFILES_YML_USER: ${{ secrets.PROFILES_YML_USER }}
+      PROFILES_YML_PASS: ${{ secrets.PROFILES_YML_PASS }}
+      PROFILES_YML_DBNAME: ${{ secrets.PROFILES_YML_DBNAME }}
+      PROFILES_YML_SCHEMA: ${{ secrets.PROFILES_YML_SCHEMA }}
+
+      # IF USING SNOWFLAKE, workflow will use these in dummy profiles.yml (else, ignored)
+      PROFILES_YML_SNOWFLAKE_ACCOUNT: ${{ secrets.PROFILES_YML_SNOWFLAKE_ACCOUNT }}
+      PROFILES_YML_SNOWFLAKE_USER: ${{ secrets.PROFILES_YML_SNOWFLAKE_USER }}
+      PROFILES_YML_SNOWFLAKE_PASSWORD: ${{ secrets.PROFILES_YML_SNOWFLAKE_PASSWORD }}
+      PROFILES_YML_SNOWFLAKE_ROLE: ${{ secrets.PROFILES_YML_SNOWFLAKE_ROLE }}
+      PROFILES_YML_SNOWFLAKE_DATABASE: ${{ secrets.PROFILES_YML_SNOWFLAKE_DATABASE }}
+      PROFILES_YML_SNOWFLAKE_WAREHOUSE: ${{ secrets.PROFILES_YML_SNOWFLAKE_WAREHOUSE }}
+
+      # IF USING OTHER DATABASE (e.g. BigQuery, Postgres, Presto, etc.)
+      # 1. You will have to modify your dummy `profiles.yml` to match the format found in your local `profiles.yml`, typically found at `~/.dbt/profiles.yml`. Or see dbt [docs](https://docs.getdbt.com/reference/profiles.yml#!).
+      # 2. Then set the connection credentials a environment variables in your `sqlfluff_lint_dbt_models.yml`.
+      # 3. Store the environment variables values as GitHub Secrets in your repo.
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+
+      - name: Setup conda environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: dbt-sqlfluff-env
+          python-version: ${{ matrix.python-version }}
+          auto-update-conda: true
+          auto-activate-base: false
+          environment-file: environment.yml
+          show-channel-urls: true
+          # use-only-tar-bz2: true
+
+      - name: Get changed files
+        id: get_file_changes
+        uses: trilom/file-changes-action@v1.2.3
+        with:
+          output: ' '
+
+      - name: Get changed .sql files in /models and /analysis to lint
+        id: get_files_to_lint
+        shell: bash -l {0}
+        # Full credit for this step to Teghan Nightengale!
+        run: |
+          # Set the command in the $() brackets as an output to use in later steps
+          echo "::set-output name=lintees::$(
+
+          # Issue where grep regular expressions don't work as expected on the
+          # Github Actions shell, check models/ and analysis/ folders seperately
+          echo \
+          $(echo ${{ steps.get_file_changes.outputs.files }} |
+          tr -s ' ' '\n' |
+          grep -E '^models.*[.]sql$' |
+          tr -s '\n' ' ') \
+          $(echo ${{ steps.get_file_changes.outputs.files }} |
+          tr -s ' ' '\n' |
+          grep -E '^analysis.*[.]sql$' |
+          tr -s '\n' ' ')
+          )"
+
+      - name: Install OpenVPN
+        shell: bash -l {0}
+        run: |
+          sudo apt install -y openvpn openvpn-systemd-resolved
+
+      - name: Write VPN config file from GitHub Secrets
+        shell: bash -l {0}
+        run: |
+          echo "${{ secrets.SURFLINE_PROD_VPN_FILE }}" > /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/ci_cd/vpn_config.ovpn
+
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@v1"
+        with:
+          config_file: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/ci_cd/vpn_config.ovpn
+          username: ${{ secrets.OVPN_USERNAME }}
+          password: ${{ secrets.OVPN_PASSWORD }}
+
+      - name: Expose workflow directory structure and CI/CD files
+        # Show folder structue and that required files are present.
+        # Mainly for sanity/debugging.
+        run: |
+          echo "Home directory (~):"
+          echo ~
+          echo " "
+          echo "Present working directory:"
+          pwd
+          echo " "
+          echo "Present working directory contents:"
+          ls -lh
+          echo " "
+          echo "Check /ci_cd folder contents for dummy profiles.yml and VPN config:"
+          ls -lh ci_cd
+
+      - name: Check dbt can connect to data warehouse and compile on its own.
+        # Call dbt separately here to try and catch a more verbose version of
+        # errors related to connection and profiles.yml issues since SQLFluff
+        # returns very unclear errors when this occurs.
+        shell: bash -l {0}
+        run : |
+          dbt compile
+
+      - name: Lint dbt models
+        if: steps.get_files_to_lint.outputs.lintees != ''
+        shell: bash -l {0}
+        run: |
+          sqlfluff lint ${{ steps.get_files_to_lint.outputs.lintees }}
