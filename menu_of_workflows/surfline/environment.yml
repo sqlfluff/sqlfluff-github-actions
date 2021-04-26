@@ -1,0 +1,13 @@
+name: dbt-sqlfluff-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - agate=1.6.1
+  - pip
+  - python=3.8
+  - pip:
+    - dbt==0.19.1
+    - sqlfluff==0.5.2
+    # Alternatively, to use latest SQLFluff updates from master. USE WITH CAUTION
+    # - "git+https://github.com/sqlfluff/sqlfluff.git@master#egg=sqlfluff"
