@@ -8,7 +8,7 @@ Workflows are listed below by contributing team with a brief description. To lea
     - Start here if you are new to workflows!
 
 - [Surfline](./menu_of_workflows/surfline)
-    - Uses `conda` to setup virtual environment and manage `python`, `dbt`, and `sqlfluff` dependencies.
+    - Uses `conda` to setup a virtual environment and manage `python`, `dbt`, and `sqlfluff` dependencies.
     - Lints only the _changed_ models in `/models` & `/analysis`.
     - Intended for use with `templater = dbt`.
     - Includes connecting to VPN (if your database checks for this).
@@ -31,4 +31,4 @@ Often you will hear us (and others, including GitHub) use the term "GitHub Actio
 
 ## Resources
 
-See the [docs](https://docs.github.com/en/actions) to learn more about GitHub Actions and developing your won worflows.
+See the Github [docs](https://docs.github.com/en/actions) to learn more about GitHub Actions and developing your own worflows.
