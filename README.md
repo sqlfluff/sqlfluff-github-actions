@@ -1,8 +1,8 @@
 # sqlfluff-github-actions
 The official resource for SQLFluff related [GitHub Actions and Workflows](https://docs.github.com/en/actions).
 
-## Menu of Github Workflows
-Workflows are listed below by contributing team with a brief description. To learn more and how to implement each click links below.
+## Menu of GitHub Workflows
+Workflows are listed below by contributing team with a brief description. To learn more and how to implement each, click the links below.
 - [Fishtown Analytics](./menu_of_workflows/fishtown_analytics)
     - Simple, clean.
     - Start here if you are new to workflows!
