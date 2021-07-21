@@ -1,8 +1,8 @@
 # sqlfluff-github-actions
 The official resource for SQLFluff related [GitHub Actions and Workflows](https://docs.github.com/en/actions).
 
-## Menu of Github Workflows
-Workflows are listed below by contributing team with a brief description. To learn more and how to implement each click links below.
+## Menu of GitHub Workflows
+Workflows are listed below by contributing team with a brief description. To learn more and how to implement each, click the links below.
 - [Fishtown Analytics](./menu_of_workflows/fishtown_analytics)
     - Simple, clean.
     - Start here if you are new to workflows!
@@ -13,6 +13,10 @@ Workflows are listed below by contributing team with a brief description. To lea
     - Intended for use with `templater = dbt`.
     - Includes connecting to VPN (if your database checks for this).
     - Checks for a valid connection to your database (required for `templater = dbt`).
+
+- [Drizly](./menu_of_workflows/drizly)
+    - Lints modified and changed SQL files in PRs (in your `dbt/models` directory)
+    - Annotates failures on the PR, on the line where they occur
 
 ## A note on nomenclature
 [GitHub Actions](https://docs.github.com/en/actions) is a ___feature___ within GitHub. It allows you to...
