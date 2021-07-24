@@ -14,6 +14,10 @@ Workflows are listed below by contributing team with a brief description. To lea
     - Includes connecting to VPN (if your database checks for this).
     - Checks for a valid connection to your database (required for `templater = dbt`).
 
+- [Drizly](./menu_of_workflows/drizly)
+    - Lints modified and changed SQL files in PRs (in your `dbt/models` directory)
+    - Annotates failures on the PR, on the line where they occur
+
 ## A note on nomenclature
 [GitHub Actions](https://docs.github.com/en/actions) is a ___feature___ within GitHub. It allows you to...
 > Automate, customize, and execute your software development [___workflows___](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions) right in your repository with GitHub Actions. You can discover, create, and share actions to perform any job you'd like, including CI/CD, and combine actions in a completely customized workflow.
