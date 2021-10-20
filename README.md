@@ -9,7 +9,7 @@ Workflows are listed below by contributing team with a brief description. To lea
 
 - [Surfline](./menu_of_workflows/surfline)
     - Uses `conda` to setup a virtual environment and manage `python`, `dbt`, and `sqlfluff` dependencies.
-    - Lints only the _changed_ models in `/models` & `/analysis`.
+    - Lints only the _changed_ and _modified_ models in `/models` & `/analysis` folders.
     - Intended for use with `templater = dbt`.
     - Includes connecting to VPN (if your database checks for this).
     - Checks for a valid connection to your database (required for `templater = dbt`).
