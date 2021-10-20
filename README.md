@@ -3,7 +3,7 @@ The official resource for SQLFluff related [GitHub Actions and Workflows](https:
 
 ## Menu of GitHub Workflows
 Workflows are listed below by contributing team with a brief description. To learn more and how to implement each, click the links below.
-- [Fishtown Analytics](./menu_of_workflows/fishtown_analytics)
+- [Sunrise Movement](./menu_of_workflows/sunrise_movement)
     - Simple, clean.
     - Start here if you are new to workflows!
 
