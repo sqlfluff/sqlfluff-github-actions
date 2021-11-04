@@ -75,11 +75,11 @@ jobs:
           echo \
           $(echo ${{ steps.get_file_changes.outputs.files_modified }} |
           tr -s ' ' '\n' |
-          grep -E '^dbt/models.*[.]sql$' |
+          grep -E '^models.*[.]sql$' |
           tr -s '\n' ' ') \
           $(echo ${{ steps.get_file_changes.outputs.files_added }} |
           tr -s ' ' '\n' |
-          grep -E '^dbt/models.*[.]sql$' |
+          grep -E '^models.*[.]sql$' |
           tr -s '\n' ' ')
           )"
 
