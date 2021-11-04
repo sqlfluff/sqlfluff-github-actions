@@ -5,14 +5,19 @@ Developed by Greg Clunies @ [Surfline](https://www.surfline.com/).
 To add this to your repo, copy the contents of [`sqlfluff_lint_dbt_models.yml`](./sqlfluff_lint_dbt_models.yml) in this folder into a file named `.github/workflows/sqlfluff_lint_dbt_models.yml`.
 
 ## This GitHub Workflow
-1. Lints all of the SQL files in the `models/` folder of your dbt project.
-1. Uses `templater = dbt` when running `sqlfluff`. See the `.sqlfluff` we use [here](./.sqlfluff).
-1. Uses [`conda`](https://docs.conda.io/projects/conda/en/latest/index.html) to manage a virtual environment that specifies the versions of `dbt`, `sqlfluff`, and any other dependencies. An example [`environment.yml`](./environment.yml) can be found in this folder. You can modify this workflow to handle your dependencies as you wish (e.g., `pip`, `virtualenv`, `poetry`, etc.).
-1. Handles VPN connection to warehouse (if required by warehouse) to allow the dbt compiler (used by SQLFluff) to query the warehouse - this used by `templater = dbt` to handle dbt macros like `dbt_utils.star()`. If your warehouse doesn't require connection via VPN, you can delete the `Install OpenVPN` and `Connect to VPN` steps from the workflow.
+- Lints any added or modified models in `/models`
+- Uses [`conda`](https://docs.conda.io/en/latest/miniconda.html) to setup a virtual environment and manage `python`, `dbt`, and `sqlfluff` dependencies. An example [`environment.yml`](./environment.yml) can be found in this folder. You can modify this workflow to handle your dependencies as you wish (e.g., `pip`, `virtualenv`, `poetry`, etc.).
+- Uses `templater = dbt` - this requires a dummy `profiles.yml` and a connection to your data warehouse from the workflow.
+- Handles connecting to warehouse via VPN if your data warehouse requires it (optional). If your warehouse doesn't require connection via VPN, you can delete the `Install OpenVPN` and `Connect to VPN` steps from the workflow.
+
+
 
 __NOTE:__ This workflow has been tested on Redshift. Config for Snowflake is included in this repo, but has not been tested.
 
 ## Setup
+### `.sqlfluff`
+We use the `.sqlfluff` found [here](./.sqlfluff).
+
 ### `templater = dbt` & dummy `profiles.yml`
 
 When `sqlfluff` uses `templater = dbt`, it is *actually using the dbt compiler* to compile your SQL before `sqlfluff` lints it. When the dbt compiler, uh ... compiles... the SQL in your models containing macros like `dbt_utils.star()`, it needs to *connect and query the warehouse* to get information about the table and columns referenced in the marco.

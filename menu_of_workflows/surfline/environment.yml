@@ -3,11 +3,8 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - agate=1.6.1
   - pip
-  - python=3.8
+  - python=3.9
   - pip:
-    - dbt==0.19.1
-    - sqlfluff==0.5.2
-    # Alternatively, to use latest SQLFluff updates from master. USE WITH CAUTION
-    # - "git+https://github.com/sqlfluff/sqlfluff.git@master#egg=sqlfluff"
+    - dbt==0.21.0
+    - sqlfluff==0.6.8
