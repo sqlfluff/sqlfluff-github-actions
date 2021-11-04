@@ -9,6 +9,7 @@ To add this to your repo, copy the contents of [`sqlfluff_lint_dbt_models.yml`](
 - Uses [`conda`](https://docs.conda.io/en/latest/miniconda.html) to setup a virtual environment and manage `python`, `dbt`, and `sqlfluff` dependencies. An example [`environment.yml`](./environment.yml) can be found in this folder. You can modify this workflow to handle your dependencies as you wish (e.g., `pip`, `virtualenv`, `poetry`, etc.).
 - Uses `templater = dbt` - this requires a dummy `profiles.yml` and a connection to your data warehouse from the workflow.
 - Handles connecting to warehouse via VPN if your data warehouse requires it (optional). If your warehouse doesn't require connection via VPN, you can delete the `Install OpenVPN` and `Connect to VPN` steps from the workflow.
+- Annotates failures on the PR, on the line where they occur.
 
 
 
