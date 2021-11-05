@@ -10,9 +10,9 @@ Workflows are listed below by contributing team with a brief description. To lea
 - [Surfline](./menu_of_workflows/surfline)
     - Lints any added or modified models in `/models`
     - Uses `conda` to setup a virtual environment and manage `python`, `dbt`, and `sqlfluff` dependencies.
-    - Uses `templater = dbt` - this requires a dummy `profiles.yml` and a connection to your data warehouse from the workflow.
-    - Handles connecting to VPN if your data warehouse requires it (optional).
-    - Annotates failures on the PR, on the line where they occur
+    - Uses `templater = dbt` - this requires a dummy `profiles.yml` and the ability to connect to your data warehouse from inside the workflow.
+      - If your data warehouse only allows connections via VPN, the workflow includes steps to configure a VPN connection. This can be easily disabled if not needed.
+    - Annotates failures on the PR, on the line where they occur.
 
 - [Drizly](./menu_of_workflows/drizly)
     - Lints modified and changed SQL files in PRs (in your `dbt/models` directory)
