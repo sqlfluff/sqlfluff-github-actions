@@ -64,30 +64,29 @@ jobs:
         with:
           output: ' '
 
-      - name: Get changed .sql files in /models and /analysis to lint
+      - name: Get new and changed .sql files in /models to lint
         id: get_files_to_lint
         shell: bash -l {0}
-        # Full credit for this step to Teghan Nightengale!
         run: |
           # Set the command in the $() brackets as an output to use in later steps
           echo "::set-output name=lintees::$(
-
           # Issue where grep regular expressions don't work as expected on the
-          # Github Actions shell, check models/ and analysis/ folders seperately
+          # Github Actions shell, check dbt/models/ folder
           echo \
-          $(echo ${{ steps.get_file_changes.outputs.files }} |
+          $(echo ${{ steps.get_file_changes.outputs.files_modified }} |
           tr -s ' ' '\n' |
           grep -E '^models.*[.]sql$' |
           tr -s '\n' ' ') \
-          $(echo ${{ steps.get_file_changes.outputs.files }} |
+          $(echo ${{ steps.get_file_changes.outputs.files_added }} |
           tr -s ' ' '\n' |
-          grep -E '^analysis.*[.]sql$' |
+          grep -E '^models.*[.]sql$' |
           tr -s '\n' ' ')
           )"
 
       - name: Install OpenVPN
         shell: bash -l {0}
         run: |
+          sudo apt-get update
           sudo apt install -y openvpn openvpn-systemd-resolved
 
       - name: Write VPN config file from GitHub Secrets
@@ -102,32 +101,41 @@ jobs:
           username: ${{ secrets.OVPN_USERNAME }}
           password: ${{ secrets.OVPN_PASSWORD }}
 
-      - name: Expose workflow directory structure and CI/CD files
-        # Show folder structue and that required files are present.
-        # Mainly for sanity/debugging.
-        run: |
-          echo "Home directory (~):"
-          echo ~
-          echo " "
-          echo "Present working directory:"
-          pwd
-          echo " "
-          echo "Present working directory contents:"
-          ls -lh
-          echo " "
-          echo "Check /ci_cd folder contents for dummy profiles.yml and VPN config:"
-          ls -lh ci_cd
+      # ---- USEFUL FOR DEBUGGING profiles.yml and VPN config ----
+      # - name: Expose workflow directory structure and CI/CD files
+      #   # Show folder structue and that required files are present.
+      #   # Mainly for sanity/debugging.
+      #   run: |
+      #     echo "Home directory (~):"
+      #     echo ~
+      #     echo " "
+      #     echo "Present working directory:"
+      #     pwd
+      #     echo " "
+      #     echo "Present working directory contents:"
+      #     ls -lh
+      #     echo " "
+      #     echo "Check /ci_cd folder contents for dummy profiles.yml and VPN config:"
+      #     ls -lh ci_cd
 
-      - name: Check dbt can connect to data warehouse and compile on its own.
-        # Call dbt separately here to try and catch a more verbose version of
-        # errors related to connection and profiles.yml issues since SQLFluff
-        # returns very unclear errors when this occurs.
-        shell: bash -l {0}
-        run : |
-          dbt compile
+      # ---- USEFUL FOR DEBUGGING CONNECTION ISSUES ----
+      # - name: Check dbt can connect to data warehouse and compile on its own.
+      #   # Call dbt separately here to try and catch a more verbose version of
+      #   # errors related to connection and profiles.yml issues since SQLFluff
+      #   # returns very unclear errors when this occurs.
+      #   shell: bash -l {0}
+      #   run : |
+      #     dbt compile
 
       - name: Lint dbt models
         if: steps.get_files_to_lint.outputs.lintees != ''
         shell: bash -l {0}
         run: |
-          sqlfluff lint ${{ steps.get_files_to_lint.outputs.lintees }}
+          sqlfluff lint --format github-annotation --annotation-level failure --nofail ${{ steps.get_files_to_lint.outputs.lintees }} > annotations.json
+
+      - name: Annotate
+        uses: yuzutech/annotations-action@v0.3.0
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          title: "SQLFluff Lint"
+          input: "./annotations.json"

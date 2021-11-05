@@ -1,0 +1,61 @@
+# For SQLFluff Rules reference, see:
+# https://docs.sqlfluff.com/en/stable/rules.html#rules-reference
+[sqlfluff]
+verbose = 0
+nocolor = False
+dialect = postgres
+templater = dbt
+rules = None
+exclude_rules = L032,L033,L034,L037,L044
+recurse = 0
+output_line_length = 80
+runaway_limit = 10
+ignore = parsing,templating
+ignore_templated_areas = True
+
+[sqlfluff:indentation]
+indented_joins = False
+template_blocks_indent = True
+
+# Some rules can be configured directly from the config common to other rules.
+[sqlfluff:rules]
+tab_space_size = 4
+max_line_length = 120
+indent_unit = space
+comma_style = trailing
+allow_scalar = True
+single_table_references = consistent
+only_aliases = True
+
+# Some rules have their own specific config.
+# All SQLFluff rules can be found at: https://docs.sqlfluff.com/en/stable/rules.html#rules-reference
+# When a rule in not listed below, we inherit the default behavior from above.
+[sqlfluff:rules:L003]
+lint_templated_tokens = False
+
+[sqlfluff:rules:L010]  # Keywords
+capitalisation_policy = lower
+
+[sqlfluff:rules:L014]  # Unquoted identifiers
+# Note that sqlfluff uses the 'postgres' dialect for Redshift.
+# Postgres keywords used to check against 'unquoted identifiers':
+#    https://www.postgresql.org/docs/8.1/sql-keywords-appendix.html
+extended_capitalisation_policy = lower
+unquoted_identifiers_policy = all
+
+[sqlfluff:rules:L016]
+# Setting to True allows us to copy/paste long URLs as comments
+ignore_comment_lines = True
+
+[sqlfluff:rules:L030]  # Function names
+capitalisation_policy = lower
+
+[sqlfluff:rules:L038]
+select_clause_trailing_comma = forbid
+
+[sqlfluff:rules:L040]  # Null & Boolean Literals
+capitalisation_policy = lower
+
+[sqlfluff:rules:L042]
+# By default, allow subqueries in from clauses, but not join clauses.
+forbid_subquery_in = join
