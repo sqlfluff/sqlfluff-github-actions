@@ -11,6 +11,8 @@ To add this to your repo, copy the contents of [`sqlfluff_lint_dbt_models.yml`](
 - Handles connecting to warehouse via VPN if your data warehouse requires it (optional). If your warehouse doesn't require connection via VPN, you can delete the `Install OpenVPN` and `Connect to VPN` steps from the workflow.
 - Annotates failures on the PR, on the line where they occur.
 
+![Example annotations screenshot](https://github.com/sqlfluff/sqlfluff-github-actions/blob/main/menu_of_workflows/surfline/example_annotations_screenshot.png)
+
 
 
 __NOTE:__ This workflow has been tested on Redshift. Config for Snowflake is included in this repo, but has not been tested.
