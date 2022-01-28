@@ -4,6 +4,10 @@ Developed by Greg Clunies @ [Surfline](https://www.surfline.com/).
 
 To add this to your repo, copy the contents of [`sqlfluff_lint_dbt_models.yml`](./sqlfluff_lint_dbt_models.yml) in this folder into a file named `.github/workflows/sqlfluff_lint_dbt_models.yml`.
 
+## Project using this workflow
+
+See the [dbt_artifacts](https://github.com/brooklyn-data/dbt_artifacts) dbt package for an example of this workflow in action. An example of the annotations can be [seen here](https://github.com/brooklyn-data/dbt_artifacts/pull/74/files).
+
 ## This GitHub Workflow
 - Lints any added or modified models in `/models`
 - Uses [`conda`](https://docs.conda.io/en/latest/miniconda.html) to setup a virtual environment and manage `python`, `dbt`, and `sqlfluff` dependencies. An example [`environment.yml`](./environment.yml) can be found in this folder. You can modify this workflow to handle your dependencies as you wish (e.g., `pip`, `virtualenv`, `poetry`, etc.).
