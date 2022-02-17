@@ -21,7 +21,13 @@ Workflows are listed below by contributing team with a brief description. To lea
 - [Jetblue](./menu_of_workflows/jetblue)
     - Uses a combination of SQLFluff and Diff Quality to lint only new/modified .sql files
     - Only runs on a github pull request when a comment has `/lint` (can be adjusted) in it
-    - Returns output of lint as a tidy comment on same github pull request
+    - Returns output of lint as a tidy comment on same github pull request'
+
+- [tails.com](./menu_of_workflows/tails.com)
+    - Heavily inspired by the [Surfline](./menu_of_workflows/surfline) worflow, with the following additions:
+    - Custom root directory.
+    - `requirements.txt` based dependency managment rather than `conda`.
+    - Robust to logging bugs in dbt logging, but using the sqlfluff `--write-output` option.
 
 ## A note on nomenclature
 [GitHub Actions](https://docs.github.com/en/actions) is a ___feature___ within GitHub. It allows you to...

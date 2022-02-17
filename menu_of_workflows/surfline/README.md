@@ -2,6 +2,8 @@
 
 Developed by Greg Clunies @ [Surfline](https://www.surfline.com/).
 
+Snowflake testing and edits by Alan Cruickshank @ [Tails.com](https://tails.com/gb/careers/).
+
 To add this to your repo, copy the contents of [`sqlfluff_lint_dbt_models.yml`](./sqlfluff_lint_dbt_models.yml) in this folder into a file named `.github/workflows/sqlfluff_lint_dbt_models.yml`.
 
 ## Project using this workflow
@@ -17,9 +19,7 @@ See the [dbt_artifacts](https://github.com/brooklyn-data/dbt_artifacts) dbt pack
 
 ![Example annotations screenshot](https://github.com/sqlfluff/sqlfluff-github-actions/blob/main/menu_of_workflows/surfline/example_annotations_screenshot.png)
 
-
-
-__NOTE:__ This workflow has been tested on Redshift. Config for Snowflake is included in this repo, but has not been tested.
+__NOTE:__ This workflow has been tested on Redshift. Config for Snowflake is included in this repo, but has not been tested. For a very similar workflow which has been tested on Snowflake, see the [tails.com flow](menu_of_workflows/tails.com)
 
 ## Setup
 ### `.sqlfluff`

@@ -1,0 +1,152 @@
+name: "SQLFluff lint"
+
+'on':
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  sqlfluff-lint-models:
+    name: Run linting flow
+    runs-on: ubuntu-latest
+
+    # Set environment variables used throughout workflow
+    env:
+      DBT_PROFILES_DIR: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/ci_cd
+
+      # SPECIFY database connection credentials as env vars below.
+      # Env var values to be fetched from as GitHub Secrets.
+      # HIGHLY recommended you use a unique set of connection credentials for this workflow alone.
+
+      # NOTE: The same approach should work with minor modification for Redshift and other datawarehouses.
+
+      # IF USING SNOWFLAKE, workflow will use these in dummy profiles.yml (else, ignored)
+      PROFILES_YML_SNOWFLAKE_ACCOUNT: ${{ secrets.PROFILES_YML_SNOWFLAKE_ACCOUNT }}
+      PROFILES_YML_SNOWFLAKE_USER: ${{ secrets.PROFILES_YML_SNOWFLAKE_USER }}
+      PROFILES_YML_SNOWFLAKE_PASSWORD: ${{ secrets.PROFILES_YML_SNOWFLAKE_PASSWORD }}
+      PROFILES_YML_SNOWFLAKE_ROLE: ${{ secrets.PROFILES_YML_SNOWFLAKE_ROLE }}
+      PROFILES_YML_SNOWFLAKE_DATABASE: ${{ secrets.PROFILES_YML_SNOWFLAKE_DATABASE }}
+      PROFILES_YML_SNOWFLAKE_WAREHOUSE: ${{ secrets.PROFILES_YML_SNOWFLAKE_WAREHOUSE }}
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+
+      - name: Install Python packages
+        # NB: This is referencing the requirements.txt file saved in the ci_cd folder in your project.
+        run: python -m pip install -r /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/ci_cd/requirements.txt
+
+      # Delete this section if VPN connection not required.
+      - name: Install OpenVPN
+        shell: bash -l {0}
+        run: |
+          sudo apt-get update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+      - name: Write VPN config file from GitHub Secrets
+        shell: bash -l {0}
+        run: |
+          echo "${{ secrets.OVPN_CERT }}" > /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/ci_cd/vpn_config.ovpn
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@v1"
+        with:
+          config_file: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/ci_cd/vpn_config.ovpn
+          # Comment out these next two lines if not required in your situation.
+          username: ${{ secrets.OVPN_USERNAME }}
+          password: ${{ secrets.OVPN_PASSWORD }}
+
+      - name: Test database connection
+        run: dbt debug
+        working-directory: data_warehouse
+
+      - name: Install dbt packages
+        run: dbt deps
+        working-directory: data_warehouse
+
+      - name: Get changed files
+        id: get_file_changes
+        uses: trilom/file-changes-action@v1.2.4
+        with:
+          output: ' '
+      - name: Get new and changed .sql files in /data_warehouse to lint
+        id: get_files_to_lint
+        shell: bash -l {0}
+        run: |
+          # Set the command in the $() brackets as an output to use in later steps
+          echo "::set-output name=lintees::$(
+          # Issue where grep regular expressions don't work as expected on the
+          # Github Actions shell, check dbt/data_warehouse/ folder
+          echo \
+          $(echo ${{ steps.get_file_changes.outputs.files_modified }} |
+          tr -s ' ' '\n' |
+          grep -E '^data_warehouse.*[.]sql$' |
+          sed 's/^data_warehouse\// /gm' |
+          tr -s '\n' ' ' ) \
+          $(echo ${{ steps.get_file_changes.outputs.files_added }} |
+          tr -s ' ' '\n' |
+          grep -E '^data_warehouse.*[.]sql$' |
+          sed 's/^data_warehouse\// /gm' |
+          tr -s '\n' ' ' )
+          )"
+
+      # ---- USEFUL FOR DEBUGGING profiles.yml and VPN config ----
+      # - name: Expose workflow directory structure and CI/CD files
+      #   # Show folder structue and that required files are present.
+      #   # Mainly for sanity/debugging.
+      #   run: |
+      #     echo "Home directory (~):"
+      #     echo ~
+      #     echo " "
+      #     echo "Present working directory:"
+      #     pwd
+      #     echo " "
+      #     echo "Present working directory contents:"
+      #     ls -lh
+      #     echo " "
+      #     echo "Check /ci_cd folder contents for dummy profiles.yml and VPN config:"
+      #     ls -lh ci_cd
+
+      # ---- USEFUL FOR DEBUGGING CONNECTION ISSUES ----
+      # - name: Check dbt can connect to data warehouse and compile on its own.
+      #   # Call dbt separately here to try and catch a more verbose version of
+      #   # errors related to connection and profiles.yml issues since SQLFluff
+      #   # returns very unclear errors when this occurs.
+      #   shell: bash -l {0}
+      #   working-directory: data_warehouse
+      #   run : |
+      #     dbt compile
+
+      - name: Lint dbt models
+        if: steps.get_files_to_lint.outputs.lintees != ''
+        shell: bash -l {0}
+        working-directory: data_warehouse
+        run: |
+          sqlfluff lint --format github-annotation --annotation-level failure --nofail ${{ steps.get_files_to_lint.outputs.lintees }} --write-output annotations.json
+
+      # This step forces the presence of an empty annotations file in the case
+      # that no sql files have been edited, so that the required CI check is still
+      # present [but contains no issues].
+      - name: Force pass because no SQL edited.
+        if: steps.get_files_to_lint.outputs.lintees == ''
+        shell: bash -l {0}
+        working-directory: data_warehouse
+        run: |
+          echo "[]" > annotations.json
+      
+      - name: Adjust output for non-root directory
+        shell: bash -l {0}
+        working-directory: data_warehouse
+        run: |
+          sed -i 's/\"file\"\: \"/\"file\"\: \"data_warehouse\//g' annotations.json
+
+      - name: Output annotations for debugging
+        shell: bash -l {0}
+        working-directory: data_warehouse
+        run: |
+          cat annotations.json
+
+      - name: Annotate
+        uses: yuzutech/annotations-action@v0.3.0
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          title: "SQLFluff Lint"
+          input: "./data_warehouse/annotations.json"
