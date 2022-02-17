@@ -2,8 +2,6 @@
 
 Developed by Greg Clunies @ [Surfline](https://www.surfline.com/).
 
-Snowflake testing and edits by Alan Cruickshank @ [Tails.com](https://tails.com/gb/careers/).
-
 To add this to your repo, copy the contents of [`sqlfluff_lint_dbt_models.yml`](./sqlfluff_lint_dbt_models.yml) in this folder into a file named `.github/workflows/sqlfluff_lint_dbt_models.yml`.
 
 ## Project using this workflow
