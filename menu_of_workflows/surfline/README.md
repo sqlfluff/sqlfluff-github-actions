@@ -17,9 +17,7 @@ See the [dbt_artifacts](https://github.com/brooklyn-data/dbt_artifacts) dbt pack
 
 ![Example annotations screenshot](https://github.com/sqlfluff/sqlfluff-github-actions/blob/main/menu_of_workflows/surfline/example_annotations_screenshot.png)
 
-
-
-__NOTE:__ This workflow has been tested on Redshift. Config for Snowflake is included in this repo, but has not been tested.
+__NOTE:__ This workflow has been tested on Redshift. Config for Snowflake is included in this repo, but has not been tested. For a very similar workflow which has been tested on Snowflake, see the [tails.com flow](menu_of_workflows/tails.com)
 
 ## Setup
 ### `.sqlfluff`

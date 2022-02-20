@@ -1,0 +1,32 @@
+# HEY!
+#
+# You should __NEVER__ check credentials into version control. Thanks for reading :)
+#
+# This 'dummy' file is here because we need to point the dbt compiler
+# (used by SQLFluff in CI/CD linting checks) to a valid profiles.yml file.
+# Normally, this is found in ~/.dbt/profiles.yml on your local machine.
+#     See docs: https://docs.getdbt.com/dbt-cli/configure-your-profile#how-to-connect-to-your-warehouse-when-using-the-cli
+# For the github workflow, this file is assumed to be at /ci_cd/profiles.yml.
+#
+# In the '.github/workflows/sqlfluff_lint.yml', we set the
+# DBT_PROFILES_DIR environment variable to point the dbt compiler to look for
+# the 'sqlfluff' profile defined in this dummy profiles.yml file.
+# You should __NEVER__ check credentials into version control. Thanks for reading :)
+
+config:
+    send_anonymous_usage_stats: False
+    use_colors: True
+
+<profile-from-dbt-project-dot-yml>:
+  target: sqlfluff
+  outputs:
+    sqlfluff:
+      type: snowflake
+      account: "{{ env_var('PROFILES_YML_SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('PROFILES_YML_SNOWFLAKE_USER') }}"
+      password: "{{ env_var('PROFILES_YML_SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('PROFILES_YML_SNOWFLAKE_ROLE') }}"
+      database: "{{ env_var('PROFILES_YML_SNOWFLAKE_DATABASE') }}"
+      warehouse: "{{ env_var('PROFILES_YML_SNOWFLAKE_WAREHOUSE') }}"
+      schema: analytics
+      threads: 1

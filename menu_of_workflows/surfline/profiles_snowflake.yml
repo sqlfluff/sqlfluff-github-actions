@@ -14,7 +14,7 @@
 #
 # NOTE:
 # If the 'pass' key-value below has quotes around it in your local profiles.yml
-# file, remove the qoutes when pasting into GitHub Secrets. Otherwise
+# file, remove the quotes when pasting into GitHub Secrets. Otherwise
 # you'll get errors.
 
 config:
