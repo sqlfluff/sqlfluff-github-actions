@@ -1,10 +1,5 @@
 # NOTE: Set this to the same version you're running in production.
-dbt-snowflake==1.0.0
-colorama
-idna
-snowflake-connector-python
-pycryptodome
+dbt-snowflake~=1.0.0
 # NOTE: It's best to keep this fixed to a version for stability, and this
 # flow requires at least 0.10.1. Do update to a later versions as they are released.
-sqlfluff==0.10.1
 sqlfluff-templater-dbt==0.10.1

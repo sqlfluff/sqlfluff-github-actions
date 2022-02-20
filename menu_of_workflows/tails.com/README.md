@@ -32,9 +32,10 @@ __NOTE:__ This workflow has been tested on Snowflake, but it should be possible 
 the flow to work with other data warehouses.
 
 ## Setup
-### `tox.ini` or `.sqlfluff`
-We use the `.tox.ini` found [here](./tox.ini), the flow should also work with a `.sqlfluff`
-file with the same format.
+### `.sqlfluff`
+
+We use the `.sqlfluff` found [here](./.sqlfluff), the flow should also work other compatible
+config files (such as `tox.ini`).
 
 ### `templater = dbt` & dummy `profiles.yml`
 
