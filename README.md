@@ -24,9 +24,9 @@ Workflows are listed below by contributing team with a brief description. To lea
     - Returns output of lint as a tidy comment on same github pull request
 
 - [tails.com](./menu_of_workflows/tails.com)
-    - Heavily inspired by the [Surfline](./menu_of_workflows/surfline) worflow, with the following additions:
+    - Heavily inspired by the [Surfline](./menu_of_workflows/surfline) workflow, with the following additions:
     - Custom root directory.
-    - `requirements.txt` based dependency managment rather than `conda`.
+    - `requirements.txt` based dependency management rather than `conda`.
     - Robust to logging bugs in dbt logging, but using the sqlfluff `--write-output` option.
 
 ## A note on nomenclature
@@ -35,7 +35,7 @@ Workflows are listed below by contributing team with a brief description. To lea
 
 These workflows, defined by YAML files placed in the `.github/workflows/` directory of your repo, are event-driven, meaning that you can run a workflow after a specified event has occurred (e.g., opening a Pull request to the `main` branch).
 
-To add a layer of confusion, the [GitHub Marketplace](https://github.com/marketplace?type=actions) has individual "Actions" (e.g., the [checkout](https://github.com/marketplace/actions/checkout) action) that you can use as steps _inside your workflow(s)_. Using Actions can reduce the code you need to write to define your worflow and accomplish your goal.
+To add a layer of confusion, the [GitHub Marketplace](https://github.com/marketplace?type=actions) has individual "Actions" (e.g., the [checkout](https://github.com/marketplace/actions/checkout) action) that you can use as steps _inside your workflow(s)_. Using Actions can reduce the code you need to write to define your workflow and accomplish your goal.
 
 Conceptually, you can connect these poorly named pieces like so:
 - GitHub Actions (a feature within GitHub allowing you to automate workflows).
@@ -46,4 +46,4 @@ Often you will hear us (and others, including GitHub) use the term "GitHub Actio
 
 ## Resources
 
-See the Github [docs](https://docs.github.com/en/actions) to learn more about GitHub Actions and developing your own worflows.
+See the Github [docs](https://docs.github.com/en/actions) to learn more about GitHub Actions and developing your own workflows.

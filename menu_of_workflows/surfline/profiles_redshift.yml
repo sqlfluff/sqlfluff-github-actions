@@ -11,7 +11,7 @@
 #
 # In '.github/workflows/sqlfluff_lint_dbt_models.yml', we set the
 # DBT_PROFILES_DIR environment variable to the path where this dummy
-# profiles.yml will be avaliable in the GitHub Worklfow virtual machine when a
+# profiles.yml will be available in the GitHub Workflow virtual machine when a
 # pull request is opened. It can then be used by SQLFluff during linting checks.
 
 config:

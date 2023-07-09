@@ -20,7 +20,7 @@ jobs:
 
       # SPECIFY database connection credentials as env vars below.
       # Env var values to be fetched from as GitHub Secrets.
-      # HIGHLY recommended you use a unique set of connection credentials for this worklfow alone.
+      # HIGHLY recommended you use a unique set of connection credentials for this workflow alone.
 
       # IF USING REDSHIFT, workflow will use these in dummy profiles.yml (else, ignored)
       PROFILES_YML_HOST: ${{ secrets.PROFILES_YML_HOST }}
@@ -103,7 +103,7 @@ jobs:
 
       # ---- USEFUL FOR DEBUGGING profiles.yml and VPN config ----
       # - name: Expose workflow directory structure and CI/CD files
-      #   # Show folder structue and that required files are present.
+      #   # Show folder structure and that required files are present.
       #   # Mainly for sanity/debugging.
       #   run: |
       #     echo "Home directory (~):"

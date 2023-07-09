@@ -47,7 +47,7 @@ config:
       schema: "{{ env_var('PROFILES_YML_SCHEMA') }}"
       threads: 1
 ```
-The credentials set in the dummy `profiles.yml` use dbt's `env_var` function to read in environmment variables that you need to set in your repo using [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets). These evironment variables are then [injected into the virtual machine running the GitHub workflow](https://github.com/sqlfluff/sqlfluff-github-actions/blob/66556e8a954fe19c055ab73bccb55a4677f1b2ef/menu_of_workflows/surfline/sqlfluff_lint_dbt_models.yml#L17-L39) like:
+The credentials set in the dummy `profiles.yml` use dbt's `env_var` function to read in environment variables that you need to set in your repo using [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets). These environment variables are then [injected into the virtual machine running the GitHub workflow](https://github.com/sqlfluff/sqlfluff-github-actions/blob/66556e8a954fe19c055ab73bccb55a4677f1b2ef/menu_of_workflows/surfline/sqlfluff_lint_dbt_models.yml#L17-L39) like:
 ```yaml
     # Set environment variables used throughout GitHub workflow
     env:
@@ -55,7 +55,7 @@ The credentials set in the dummy `profiles.yml` use dbt's `env_var` function to 
 
       # SPECIFY database connection credentials as env vars below.
       # Env var values to be fetched from as GitHub Secrets.
-      # HIGHLY recommended you use a unique set of connection credentials for this worklfow alone.
+      # HIGHLY recommended you use a unique set of connection credentials for this workflow alone.
 
       # IF USING REDSHIFT, workflow will use these in dummy profiles.yml (else, ignored)
       PROFILES_YML_HOST: ${{ secrets.PROFILES_YML_HOST }}
