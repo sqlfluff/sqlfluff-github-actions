@@ -1,0 +1,32 @@
+[sqlfluff]
+templater = jinja
+dialect = snowflake
+max_line_length = 160
+
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 4
+
+[sqlfluff:rules:layout.long_lines]
+ignore_comment_lines = True
+ignore_comment_clauses = True
+
+[sqlfluff:rules:capitalisation.keywords]
+# for Keywords
+capitalisation_policy = lower
+
+[sqlfluff:rules:ambiguous.column_references]
+# GROUP BY/ORDER BY column references
+group_by_and_order_by_style = explicit
+
+[sqlfluff:rules:convention.blocked_words]
+# Comma separated list of blocked words that should not be used
+blocked_words = "iff"
+blocked_regex = None
+
+[sqlfluff:templater:jinja]
+apply_dbt_builtins = True
+
+[sqlfluff:templater:jinja:context]
+database=analytics
+schema=prod
