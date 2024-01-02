@@ -1,0 +1,48 @@
+# Original source: https://github.com/sqlfluff/sqlfluff-github-actions/blob/main/menu_of_workflows/surfline/sqlfluff_lint_dbt_models.yml
+name: SQLFluff lint dbt data models
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  sqlfluff-lint-models:
+    name: Lint dbt models using SQLFluff
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest']
+        python-version: ['3.11']
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install Python packages or restore cache
+        run: pip install -r requirements.txt
+
+      - name: Get all changed model SQL files
+        id: changed-files-models
+        uses: tj-actions/changed-files@v37
+        with:
+          files: models/**/*.sql
+          files_ignore: models/utils/date_spine.sql
+
+      - name: Lint dbt models
+        if: steps.changed-files-models.outputs.any_changed == 'true'
+        shell: bash -l {0}
+        run: |
+          sqlfluff lint --format github-annotation-native --annotation-level failure ${{ steps.changed-files-models.outputs.all_changed_files }}
