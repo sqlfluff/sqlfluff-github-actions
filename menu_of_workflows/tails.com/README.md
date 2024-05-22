@@ -5,8 +5,8 @@ the base design heavily borrowed from the [surfline workflow](menu_of_workflows/
 Much of the design and documentation is taken directly from that flow and so Redshift users
 may find it helpful to combine both approaches.
 
-To add this to your repo, copy the contents of [`sqlfluff_lint_dbt_models.yml`](./sqlfluff_lint_dbt_models.yml)
-in this folder into a file named `.github/workflows/sqlfluff_lint_dbt_models.yml`.
+To add this to your repo, copy the contents of [`sqlfluff_lint.yml`](./sqlfluff_lint.yml)
+in this folder into a file named `.github/workflows/sqlfluff_lint.yml`.
 
 ## This GitHub Workflow
 - Lints any added or modified models in `/data_warehouse`, this assumes
