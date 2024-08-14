@@ -72,7 +72,7 @@ jobs:
         shell: bash -l {0}
         run: |
           # Set the command in the $() brackets as an output to use in later steps
-          echo "::set-output name=lintees::$(
+          echo "lintees=$(
           # Issue where grep regular expressions don't work as expected on the
           # Github Actions shell, check dbt/data_warehouse/ folder
           echo \
@@ -86,7 +86,7 @@ jobs:
           grep -E '^data_warehouse.*[.]sql$' |
           sed 's/^data_warehouse\// /gm' |
           tr -s '\n' ' ' )
-          )"
+          )" >> $GITHUB_OUTPUT
 
       # ---- USEFUL FOR DEBUGGING profiles.yml and VPN config ----
       # - name: Expose workflow directory structure and CI/CD files
